@@ -9,4 +9,4 @@
 - [x] Implementation limited to the standard libraries including net/http
 - [x] Persistence in-memory is sufficient (there is no requirement to persist items between application runs)
 - [ ] Observability (logging, metric, or tracing)
-- [ ] Automated testing of endpoints
+- [x] Automated testing of endpoints
