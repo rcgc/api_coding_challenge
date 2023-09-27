@@ -1,3 +1,21 @@
+//	Cars API
+//
+//	Api to administrate cars requests
+//
+//		Schemes: http
+//
+//   	Host: localhost:8080
+//  	BasePath: /
+//
+//	Version: 1.0
+//	License: MIT http://opensource.org/licenses/MIT
+//
+//      Consumes:
+//   - application/json
+//     Produces:
+//   - application/json
+//
+//   swagger:meta
 package main
 
 import (

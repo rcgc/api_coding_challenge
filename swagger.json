@@ -1,0 +1,192 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "http"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "description": "Api to administrate cars requests",
+    "title": "Cars API",
+    "license": {
+      "name": "MIT",
+      "url": "http://opensource.org/licenses/MIT"
+    },
+    "version": "1.0"
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "paths": {
+    "/cars": {
+      "get": {
+        "description": "Gets all the cars from the database",
+        "consumes": [
+          "application/json "
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "Car"
+        ],
+        "operationId": "getAllCars",
+        "responses": {
+          "200": {
+            "description": "Car",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Car"
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "description": "Updates an existing Car in the database according to the Id sent, otherwise returns error",
+        "tags": [
+          "Car"
+        ],
+        "operationId": "updateCar",
+        "responses": {
+          "200": {
+            "description": "Car",
+            "schema": {
+              "$ref": "#/definitions/Car"
+            }
+          },
+          "400": {
+            "description": ""
+          },
+          "404": {
+            "description": ""
+          }
+        }
+      },
+      "post": {
+        "description": "Creates a new Car in the database, in case of similar Id returns error",
+        "tags": [
+          "Car"
+        ],
+        "operationId": "createCar",
+        "responses": {
+          "201": {
+            "description": "Car",
+            "schema": {
+              "$ref": "#/definitions/Car"
+            }
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      },
+      "delete": {
+        "description": "Deletes an existing Car in the database according to the Id sent, otherwise returns error",
+        "tags": [
+          "Car"
+        ],
+        "operationId": "deleteCar",
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "404": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/cars/{id}": {
+      "get": {
+        "description": "Gets a car by id from the database",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "schemes": [
+          "http"
+        ],
+        "tags": [
+          "Car"
+        ],
+        "operationId": "getCarById",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "id of the car",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Car",
+            "schema": {
+              "$ref": "#/definitions/Car"
+            }
+          },
+          "404": {
+            "description": ""
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Car": {
+      "type": "object",
+      "properties": {
+        "Category": {
+          "description": "Category of car\nin: string",
+          "type": "string"
+        },
+        "Color": {
+          "description": "Color of car\nin: string",
+          "type": "string"
+        },
+        "Id": {
+          "description": "ID of car\nin: string ",
+          "type": "string"
+        },
+        "Make": {
+          "description": "Make of car\nin: string",
+          "type": "string"
+        },
+        "Mileage": {
+          "description": "Mileage of car\nin: float64",
+          "type": "number",
+          "format": "double"
+        },
+        "Model": {
+          "description": "Model of car\nin: string",
+          "type": "string"
+        },
+        "Package": {
+          "description": "Package of car\nin: string",
+          "type": "string"
+        },
+        "Price": {
+          "description": "Price of car\nin: float64",
+          "type": "number",
+          "format": "double"
+        },
+        "Year": {
+          "description": "Year of car\nin: int",
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "x-go-package": "example/cars"
+    }
+  }
+}

@@ -15,7 +15,12 @@ type carHandler struct {
 func (h *carHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		h.get(w, r)
+		if idFromUrl(r) == "-1"{
+			h.getAll(w, r)
+		} else {
+			h.getById(w, r)
+		}
+		
 	case "POST":
 		h.post(w, r)
 	case "PUT", "PATCH":
@@ -27,7 +32,60 @@ func (h *carHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (h *carHandler) get(w http.ResponseWriter, r *http.Request) {
+// swagger:route GET /cars Car getAllCars
+//
+// Gets all the cars from the database
+//
+// ---
+// Consumes:
+// - application/json 
+//
+// Produces:
+// - application/json
+//
+// Schemes: http
+//
+// Responses:
+// 200: []Car
+func (h *carHandler) getAll(w http.ResponseWriter, r *http.Request){
+	defer h.Unlock()
+	h.Lock()
+
+	car := Car{}
+	q, err := car.getAllCars()
+
+	if err != nil {
+		respondWithError(w, http.StatusBadRequest, err.Error())
+		return
+	}
+	
+	respondWithJSON(w, http.StatusOK, q)
+}
+
+// swagger:route GET /cars/{id} Car getCarById
+// 
+// Gets a car by id from the database
+//
+// ---
+// Consumes:
+// - application/json
+//
+// Produces:
+// - application/json
+//
+// Schemes: http
+//
+// Parameters:
+// + id: id
+//   in: path
+//   description: id of the car
+//   required: true
+//   type: string
+//
+// Responses:
+// 200: Car
+// 404:
+func (h *carHandler) getById(w http.ResponseWriter, r *http.Request) {
 	defer h.Unlock()
 	h.Lock()
 
@@ -35,17 +93,7 @@ func (h *carHandler) get(w http.ResponseWriter, r *http.Request) {
 	id := idFromUrl(r)
 
 	car := Car{Id: id}
-	if id == "-1" {
-		q, err := car.getAllCars()
-
-		if err != nil {
-			respondWithError(w, http.StatusBadRequest, err.Error())
-			return
-		}
-		
-		respondWithJSON(w, http.StatusOK, q)
-		return
-	} else {
+	if id != "-1" {
 		query, err := car.getCarById()
 		
 		if err != nil {
@@ -56,9 +104,16 @@ func (h *carHandler) get(w http.ResponseWriter, r *http.Request) {
 		respondWithJSON(w, http.StatusOK, query)
 		return
 	}
-	//respondWithError(w, http.StatusBadRequest, "no valid URL")
 }
 
+// swagger:route POST /cars Car createCar
+// 
+// Creates a new Car in the database, in case of similar Id returns error
+//
+// ---
+// Responses:
+// 201: Car
+// 400:
 func (h *carHandler) post(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	body, err := ioutil.ReadAll(r.Body)
@@ -93,6 +148,15 @@ func (h *carHandler) post(w http.ResponseWriter, r *http.Request) {
 	respondWithError(w, http.StatusBadRequest, "no valid URL")
 }
 
+// swagger:route PUT /cars Car updateCar
+// 
+// Updates an existing Car in the database according to the Id sent, otherwise returns error
+// 
+// ---
+// Responses:
+// 200: Car
+// 400:
+// 404:
 func (h *carHandler) put(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
@@ -138,6 +202,14 @@ func (h *carHandler) put(w http.ResponseWriter, r *http.Request) {
 	respondWithError(w, http.StatusBadRequest, "no valid URL")
 }
 
+// swagger:route DELETE /cars Car deleteCar
+//
+// Deletes an existing Car in the database according to the Id sent, otherwise returns error
+//
+// ---
+// Responses:
+// 204:
+// 404:
 func (h *carHandler) delete(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 

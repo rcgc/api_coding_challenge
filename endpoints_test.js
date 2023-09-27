@@ -22,7 +22,7 @@ function testGetCarById_WhenStatusNotFound_Response404(){
   check(res, {'Test GetCarById when status Not Found response status 404': (r) => r.status == 404})
 }
 
-function testCreateCar_WhenStatusOk_Response201(){
+function testCreateCar_WhenStatusCreated_Response201(){
   const body = {
     Id: "abcdefghij",
     Make: "Nissan",
@@ -169,7 +169,7 @@ export default function(){
   testGetCarById_WhenStatusOk_Response200()
   testGetCarById_WhenStatusNotFound_Response404()
 
-  testCreateCar_WhenStatusOk_Response201()
+  testCreateCar_WhenStatusCreated_Response201()
   testCreateCar_WhenStatusBadRequest_Response400()
 
   testUpdateCar_WhenStatusOk_Response200()
