@@ -11,8 +11,6 @@ func main() {
 	carhandler := newCarHandler()
 	http.Handle("/cars", carhandler)
 	http.Handle("/cars/", carhandler)
-	http.Handle("/cars/profile", carhandler)
-	http.Handle("/cars/profile/", carhandler)
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Home")

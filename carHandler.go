@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
+	"strings"
 	"sync"
 )
 
@@ -27,32 +28,14 @@ func (h *carHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *carHandler) get(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
-
-	ct := r.Header.Get("content-type")
-	if ct != "application/json" {
-		respondWithError(w, http.StatusUnsupportedMediaType, "content type 'application/json' required")
-		return
-	}
-
-	var car Car
-	if r.URL.String() == "/cars/profile" || r.URL.String() == "/cars/profile/" {
-		err = json.Unmarshal(body, &car)
-		if err != nil {
-			respondWithError(w, http.StatusBadRequest, err.Error())
-			return
-		}
-	}
-
 	defer h.Unlock()
 	h.Lock()
 
-	if r.URL.String() == "/cars" || r.URL.String() == "/cars/" {
+
+	id := idFromUrl(r)
+
+	car := Car{Id: id}
+	if id == "-1" {
 		q, err := car.getAllCars()
 
 		if err != nil {
@@ -62,7 +45,7 @@ func (h *carHandler) get(w http.ResponseWriter, r *http.Request) {
 		
 		respondWithJSON(w, http.StatusOK, q)
 		return
-	} else if r.URL.String() == "/cars/profile" || r.URL.String() == "/cars/profile/" {
+	} else {
 		query, err := car.getCarById()
 		
 		if err != nil {
@@ -73,7 +56,7 @@ func (h *carHandler) get(w http.ResponseWriter, r *http.Request) {
 		respondWithJSON(w, http.StatusOK, query)
 		return
 	}
-	respondWithError(w, http.StatusBadRequest, "no valid URL")
+	//respondWithError(w, http.StatusBadRequest, "no valid URL")
 }
 
 func (h *carHandler) post(w http.ResponseWriter, r *http.Request) {
@@ -133,15 +116,22 @@ func (h *carHandler) put(w http.ResponseWriter, r *http.Request) {
 		}
 
 		defer h.Unlock()
-		h.Lock()
+		h.Lock()		
 
 		q, err := car.updateCar()
 
-		if err != nil {
-			respondWithError(w, http.StatusBadRequest, err.Error())
-			return
+		if err != nil{
+			if err.Error() == "id field empty" || err.Error() == "make field empty" || err.Error() == "model field empty" || 
+			err.Error() == "package field empty" || err.Error() == "color field empty" || err.Error() == "year field must be gt 0" ||
+			err.Error() == "category field empty" || err.Error() == "mileage field must be gt 0" || err.Error() == "price field must be gt 0" {
+				respondWithError(w, http.StatusBadRequest, err.Error())
+				return
+			}
+			if err.Error() == "id not found" {
+				respondWithError(w, http.StatusNotFound, err.Error())
+				return
+			}
 		}
-
 		respondWithJSON(w, http.StatusOK, q)
 		return
 	}
@@ -197,23 +187,29 @@ func respondWithJSON(w http.ResponseWriter, code int, data interface{}) {
 	w.Write(response)
 }
 
-/*
-func idFromUrl(r *http.Request) (int, error) {
+func idFromUrl(r *http.Request) (string) {
 	parts := strings.Split(r.URL.String(), "/")
 
-	if len(parts) != 3 {
-		return 0, errors.New("not found")
+	if len(parts) < 3 {
+		return "-1"
 	}
 
+	if parts[2] == ""{
+		return "-1"
+	}
+	
+	/*
 	id, err := strconv.Atoi(parts[len(parts)-1])
 
 	if err != nil {
-		return 0, errors.New("not found")
+		return -1, errors.New("not found")
 	}
+	*/
 
-	return id, nil
+	id :=  parts[2]
+
+	return id
 }
-*/
 
 /*
 func splitUrlParameters(r *http.Request) ([]string){
