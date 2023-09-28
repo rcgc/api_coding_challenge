@@ -1,0 +1,63 @@
+basePath: /
+definitions:
+  main.Car:
+    description: car information
+    properties:
+      category:
+        type: string
+      color:
+        type: string
+      id:
+        type: string
+      make:
+        type: string
+      mileage:
+        type: number
+      model:
+        type: string
+      package:
+        type: string
+      price:
+        type: number
+      year:
+        type: integer
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8080
+info:
+  contact:
+    email: roberto140298@gmail.com
+    name: Roberto Guzmán
+  description: Simple swagger implementation in Go HTTP
+  license:
+    name: Apache 2.0
+    url: https://opensource.org/license/mit/
+  termsOfService: http://swagger.io/terms/
+  title: Cars Restful API with Swagger
+  version: "0.1"
+paths:
+  /cars:
+    get:
+      consumes:
+      - application/json
+      description: Retrieves all the cars stored in the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              items:
+                $ref: '#/definitions/main.Car'
+              type: array
+            type: array
+      summary: List cars
+      tags:
+      - car
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

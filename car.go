@@ -1,33 +1,16 @@
 package main
 
-// swagger:model Car
+// Car model info
+// @Description car information
 type Car struct {
-	// ID of car
-	// in: string 
 	Id       string  `json:id`
-	// Make of car
-	// in: string
 	Make     string  `json:make`
-	// Model of car
-	// in: string
 	Model    string  `json:model`
-	// Package of car
-	// in: string
 	Package  string  `json:package`
-	// Color of car
-	// in: string
 	Color    string  `json:color`
-	// Year of car
-	// in: int
 	Year     int     `json:year`
-	// Category of car
-	// in: string
 	Category string  `json:category`
-	// Mileage of car
-	// in: float64
 	Mileage  float64 `json:mileage`
-	// Price of car
-	// in: float64
 	Price    float64 `json:price`
 }
 
