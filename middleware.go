@@ -34,8 +34,8 @@ func (m *carMiddleware)validate_create(c *Car) error {
 	if c.Category == "" {
 		return fmt.Errorf("category field empty")
 	}
-	if c.Mileage <= 0 {
-		return fmt.Errorf("mileage field must be gt 0")
+	if c.Mileage < 0 {
+		return fmt.Errorf("mileage field must be ge 0")
 	}
 	if c.Price <= 0 {
 		return fmt.Errorf("price field must be gt 0")
@@ -66,8 +66,8 @@ func (m *carMiddleware) validate_update(c *Car) error {
 	if c.Category == "" {
 		return fmt.Errorf("category field empty")
 	}
-	if c.Mileage <= 0 {
-		return fmt.Errorf("mileage field must be gt 0")
+	if c.Mileage < 0 {
+		return fmt.Errorf("mileage field must be ge 0")
 	}
 	if c.Price <= 0 {
 		return fmt.Errorf("price field must be gt 0")

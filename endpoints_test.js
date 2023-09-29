@@ -138,7 +138,7 @@ function testUpdateCar_WhenStatusNotFound_Response404(){
 }
 
 function testDeleteCar_WhenStatusNoContent_Response204(){
-  const body = { Id: 'abcdefghij' }
+  const id = 'abcdefghij'
 
   const params = {
     headers: {
@@ -146,12 +146,12 @@ function testDeleteCar_WhenStatusNoContent_Response204(){
     },
   };
 
-  const res = http.del(url, JSON.stringify(body), params)
+  const res = http.del(url+id, params)
   check(res, {'Test DeleteCar when status No Content response 204': (r) => r.status == 204});
 }
 
 function testDeleteCar_WhenStatusNotFound_Response404(){
-  const body = { Id: '11zxyabcdfg' }
+  const id = '11zxyabcdfg'
 
   const params = {
     headers: {
@@ -159,7 +159,7 @@ function testDeleteCar_WhenStatusNotFound_Response404(){
     },
   };
 
-  const res = http.del(url, JSON.stringify(body), params)
+  const res = http.del(url+id, params)
   check(res, {'Test DeleteCar when status Not Found response 404': (r) => r.status == 404});
 }
 

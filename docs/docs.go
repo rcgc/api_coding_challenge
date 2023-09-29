@@ -25,7 +25,7 @@ const docTemplate = `{
     "paths": {
         "/cars": {
             "get": {
-                "description": "Retrieves all the cars stored in the database",
+                "description": "Gets all the cars from the database",
                 "consumes": [
                     "application/json"
                 ],
@@ -35,18 +35,171 @@ const docTemplate = `{
                 "tags": [
                     "car"
                 ],
-                "summary": "List cars",
+                "summary": "Get all cars",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "array",
                             "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/main.Car"
-                                }
+                                "$ref": "#/definitions/main.Car"
                             }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Updates an existing car from the database corresponding to the id sent. Otherwise, returns error",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "car"
+                ],
+                "summary": "Update a car",
+                "parameters": [
+                    {
+                        "description": "Car JSON Object",
+                        "name": "car",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.Car"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.Car"
+                        }
+                    },
+                    "400": {
+                        "description": "BadRequest",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a new car in the database. In case of existing id returns error",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "car"
+                ],
+                "summary": "Create a new car",
+                "parameters": [
+                    {
+                        "description": "Car JSON Object",
+                        "name": "car",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.Car"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.Car"
+                        }
+                    },
+                    "400": {
+                        "description": "BadRequest",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/cars/{id}": {
+            "get": {
+                "description": "Gets a single car from the database corresponding to the id in the path. Otherwise, returns error",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "car"
+                ],
+                "summary": "Get a car",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Car Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.Car"
+                        }
+                    },
+                    "404": {
+                        "description": "NotFound",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes an existing car from the database corresponding to the id in the path. Otherwise, returns error",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "car"
+                ],
+                "summary": "Delete a car",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Car Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "NoContent",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "NotFound",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }

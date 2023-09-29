@@ -42,7 +42,7 @@ paths:
     get:
       consumes:
       - application/json
-      description: Retrieves all the cars stored in the database
+      description: Gets all the cars from the database
       produces:
       - application/json
       responses:
@@ -50,11 +50,116 @@ paths:
           description: OK
           schema:
             items:
-              items:
-                $ref: '#/definitions/main.Car'
-              type: array
+              $ref: '#/definitions/main.Car'
             type: array
-      summary: List cars
+      summary: Get all cars
+      tags:
+      - car
+    post:
+      consumes:
+      - application/json
+      description: Creates a new car in the database. In case of existing id returns
+        error
+      parameters:
+      - description: Car JSON Object
+        in: body
+        name: car
+        required: true
+        schema:
+          $ref: '#/definitions/main.Car'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Car'
+        "400":
+          description: BadRequest
+          schema:
+            type: string
+      summary: Create a new car
+      tags:
+      - car
+    put:
+      consumes:
+      - application/json
+      description: Updates an existing car from the database corresponding to the
+        id sent. Otherwise, returns error
+      parameters:
+      - description: Car JSON Object
+        in: body
+        name: car
+        required: true
+        schema:
+          $ref: '#/definitions/main.Car'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Car'
+        "400":
+          description: BadRequest
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Update a car
+      tags:
+      - car
+  /cars/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes an existing car from the database corresponding to the
+        id in the path. Otherwise, returns error
+      parameters:
+      - description: Car Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: NoContent
+          schema:
+            type: string
+        "404":
+          description: NotFound
+          schema:
+            type: string
+      summary: Delete a car
+      tags:
+      - car
+    get:
+      consumes:
+      - application/json
+      description: Gets a single car from the database corresponding to the id in
+        the path. Otherwise, returns error
+      parameters:
+      - description: Car Id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.Car'
+        "404":
+          description: NotFound
+          schema:
+            type: string
+      summary: Get a car
       tags:
       - car
 securityDefinitions:

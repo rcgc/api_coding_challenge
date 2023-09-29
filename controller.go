@@ -8,13 +8,13 @@ import (
 )
 
 // getAll godoc
-// @Summary List cars
-// @Description Retrieves all the cars stored in the database
-// @Tags car
-// @Accept  json
-// @Produce  json
-// @Success 200 {array} []Car
-// @Router /cars [get]
+// @Summary		Get all cars
+// @Description Gets all the cars from the database
+// @Tags		car
+// @Accept		json
+// @Produce		json
+// @Success		200 		{array} 		Car			"OK"
+// @Router		/cars		[get]
 func (h *carHandler) getAll(w http.ResponseWriter, r *http.Request){
 	defer h.Unlock()
 	h.Lock()
@@ -30,10 +30,19 @@ func (h *carHandler) getAll(w http.ResponseWriter, r *http.Request){
 	respondWithJSON(w, http.StatusOK, q)
 }
 
+// getById godoc
+// @Summary		Get a car
+// @Description	Gets a single car from the database corresponding to the id in the path. Otherwise, returns error
+// @Tags		car
+// @Accept		json
+// @Produce		json
+// @Param		id			path			string			true			"Car Id"
+// @Success		200			{object}		Car				"OK"
+// @Failure		404			{string}		string			"NotFound"
+// @Router		/cars/{id} 	[get]
 func (h *carHandler) getById(w http.ResponseWriter, r *http.Request) {
 	defer h.Unlock()
 	h.Lock()
-
 
 	id := idFromUrl(r)
 
@@ -51,6 +60,16 @@ func (h *carHandler) getById(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// post doc
+// @Summary		Create a new car
+// @Description	Creates a new car in the database. In case of existing id returns error
+// @Tags		car
+// @Accept		json
+// @Produce		json
+// @Param		car			body			Car				true			"Car JSON Object"
+// @Success		201			{object}		Car				"OK"
+// @Failure		400			{string}		string			"BadRequest"
+// @Router		/cars 		[post]
 func (h *carHandler) post(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	body, err := ioutil.ReadAll(r.Body)
@@ -85,6 +104,17 @@ func (h *carHandler) post(w http.ResponseWriter, r *http.Request) {
 	respondWithError(w, http.StatusBadRequest, "no valid URL")
 }
 
+// put doc
+// @Summary		Update a car
+// @Description	Updates an existing car from the database corresponding to the id sent. Otherwise, returns error
+// @Tags			car
+// @Accept		json
+// @Produce		json
+// @Param		car			body			Car				true			"Car JSON Object"
+// @Success		200			{object}		Car				"OK"
+// @Failure		400			{string}		string			"BadRequest"
+// @Failure		404			{string}		string
+// @Router		/cars		[put]
 func (h *carHandler) put(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 
@@ -130,31 +160,25 @@ func (h *carHandler) put(w http.ResponseWriter, r *http.Request) {
 	respondWithError(w, http.StatusBadRequest, "no valid URL")
 }
 
+// delete doc
+// @Summary		Delete a car
+// @Description  Deletes an existing car from the database corresponding to the id in the path. Otherwise, returns error
+// @Tags			car
+// @Accept		json
+// @Produce		json
+// @Param		id			path			string			true			"Car Id"
+// @Success		204			{string}		string			"NoContent"
+// @Failure		404			{string}		string			"NotFound"
+// @Router		/cars/{id}	[delete]
 func (h *carHandler) delete(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
+	defer h.Unlock()
+	h.Lock()
 
-	body, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		respondWithError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
+	id := idFromUrl(r)
 
-	ct := r.Header.Get("content-type")
-	if ct != "application/json" {
-		respondWithError(w, http.StatusUnsupportedMediaType, "content type 'application/json' required")
-		return
-	}
-	if r.URL.String() == "/cars" || r.URL.String() == "/cars/"{
-		var car Car
-		err = json.Unmarshal(body, &car)
-		if err != nil {
-			respondWithError(w, http.StatusBadRequest, err.Error())
-			return
-		}
+	car := Car{Id: id}
 
-		defer h.Unlock()
-		h.Lock()
-
+	if id != "-1"{
 		q, err := car.deleteCar()
 
 		if err != nil {
@@ -165,7 +189,6 @@ func (h *carHandler) delete(w http.ResponseWriter, r *http.Request) {
 		respondWithJSON(w, http.StatusNoContent, q)
 		return
 	}
-	respondWithError(w, http.StatusBadRequest, "no valid URL")
 }
 
 func respondWithError(w http.ResponseWriter, code int, msg string) {

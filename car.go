@@ -10,8 +10,8 @@ type Car struct {
 	Color    string  `json:color`
 	Year     int     `json:year`
 	Category string  `json:category`
-	Mileage  float64 `json:mileage`
-	Price    float64 `json:price`
+	Mileage  float32 `json:mileage`
+	Price    float32 `json:price`
 }
 
 var db Db
@@ -77,11 +77,11 @@ func (c *Car) deleteCar() (Car, error) {
 		return Car{}, err
 	}
 
-	car, err := db.delete(c.Id)
+	_, err = db.delete(c.Id)
 
 	if err != nil {
 		return Car{}, err
 	}
 
-	return car, nil
+	return Car{}, nil
 }
