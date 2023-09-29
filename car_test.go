@@ -21,7 +21,7 @@ func TestCreateCar_WhenIdAlreadyExistsInDb(t *testing.T){
 	car.createCar()
 	_, err := car.createCar()
 
-	assert.Equal(t, err.Error(), "id already exists in db")
+	assert.Equal(t, err.Error(), "id already exists")
 }
 
 func TestCreateCar_WhenIdFieldEmpty(t *testing.T){
@@ -74,10 +74,10 @@ func TestCreateCar_WhenCategoryFieldEmpty(t *testing.T){
 }
 
 func TestCreateCar_WhenMileageFieldLE_0(t *testing.T){
-	car := Car{ Id: "opqrstuvw", Make: "Nissan", Model: "Altima", Package: "XX", Color: "Gray", Year: 2013, Category: "SUV", Mileage: 0, Price: 2499000 }
+	car := Car{ Id: "opqrstuvw", Make: "Nissan", Model: "Altima", Package: "XX", Color: "Gray", Year: 2013, Category: "SUV", Mileage: -1, Price: 2499000 }
 	_, err := car.createCar()
 
-	assert.Equal(t, err.Error(), "mileage field must be gt 0")
+	assert.Equal(t, err.Error(), "mileage field must be ge 0")
 }
 
 func TestCreateCar_WhenPriceFieldLE_0(t *testing.T){
@@ -180,10 +180,10 @@ func TestUpdateCar_WhenCategoryFieldEmpty(t *testing.T){
 }
 
 func TestUpdateCar_WhenMileageFieldLE_0(t *testing.T){
-	car := Car{ Id: "opqrstuvw", Make: "Nissan", Model: "Altima", Package: "XX", Color: "Gray", Year: 2013, Category: "SUV", Mileage: 0, Price: 2499000 }
+	car := Car{ Id: "opqrstuvw", Make: "Nissan", Model: "Altima", Package: "XX", Color: "Gray", Year: 2013, Category: "SUV", Mileage: -1, Price: 2499000 }
 	_, err := car.updateCar()
 
-	assert.Equal(t, err.Error(), "mileage field must be gt 0")
+	assert.Equal(t, err.Error(), "mileage field must be ge 0")
 }
 
 func TestUpdateCar_WhenPriceFieldLE_0(t *testing.T){
