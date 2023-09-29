@@ -10,8 +10,8 @@ type Car struct {
 	Color    string  `json:color`
 	Year     int     `json:year`
 	Category string  `json:category`
-	Mileage  float32 `json:mileage`
-	Price    float32 `json:price`
+	Mileage  float64 `json:mileage`
+	Price    float64 `json:price`
 }
 
 var db Db

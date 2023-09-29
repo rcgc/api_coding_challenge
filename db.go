@@ -26,7 +26,7 @@ func (db *Db) add(c *Car) (Car, error){
 
 	for _, v := range db.cars{
 		if car.Id == v.Id {
-			return car, fmt.Errorf("id already exists in db")
+			return car, fmt.Errorf("id already exists")
 		}
 	}
 

@@ -4,7 +4,6 @@ go 1.19
 
 require (
 	github.com/stretchr/testify v1.8.4
-	github.com/swaggo/http-swagger/example/go-chi v0.0.0-20230830153024-537f045bded0
 	github.com/swaggo/http-swagger/v2 v2.0.2
 	github.com/swaggo/swag v1.16.2
 )
