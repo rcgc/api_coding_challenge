@@ -25,6 +25,7 @@ import (
 
 	_ "example/cars/docs"
 
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
 )
 
@@ -34,6 +35,8 @@ func main() {
 	carhandler := newCarHandler()
 	http.Handle("/cars", carhandler)
 	http.Handle("/cars/", carhandler)
+
+	http.Handle("/metrics", promhttp.Handler())
 
 	http.HandleFunc("/swagger/", func(w http.ResponseWriter, r *http.Request) {
 		httpSwagger.WrapHandler(w, r)
