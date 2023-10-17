@@ -60,7 +60,7 @@ func (h *carHandler) getById(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// post doc
+// post godoc
 // @Summary		Create a new car
 // @Description	Creates a new car in the database. In case of existing id returns error
 // @Tags		car
@@ -104,7 +104,7 @@ func (h *carHandler) post(w http.ResponseWriter, r *http.Request) {
 	respondWithError(w, http.StatusBadRequest, "no valid URL")
 }
 
-// put doc
+// put godoc
 // @Summary		Update a car
 // @Description	Updates an existing car from the database corresponding to the id sent. Otherwise, returns error
 // @Tags			car
@@ -160,7 +160,7 @@ func (h *carHandler) put(w http.ResponseWriter, r *http.Request) {
 	respondWithError(w, http.StatusBadRequest, "no valid URL")
 }
 
-// delete doc
+// delete godoc
 // @Summary		Delete a car
 // @Description  Deletes an existing car from the database corresponding to the id in the path. Otherwise, returns error
 // @Tags			car
